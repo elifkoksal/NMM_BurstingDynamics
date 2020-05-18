@@ -1,0 +1,39 @@
+# Wendling's neural mass model + Stim
+# Slow reduced problem taug/taua = 0
+
+v0' = y5
+v1' = y6
+v2' = y7*(taua/taub)
+
+y5' = (A*sigm(pyr + pm*A*taua+c2*taua*v1 - c4*taub*v2 -c7*taug*v3)- 2*y5- v0)
+y6' = (A*sigm(pyr + c1*taua*v0)-2*y6- v1)
+y7' = (B*sigm(gaba + c3*taua*v0)-2*y7- v2)*(taua/taub)
+
+
+sigm(x) = 5/(1+exp(0.56*(6-x)))
+
+taua = 1/aa
+taub = 1/bb
+
+v3 = G*sigm(c5*taua*v0-c6*taub*v2)
+
+# Parameters
+# external input
+par pm = 90, ps  = 0
+# synaptic constants
+par A=5, B=25, G=35, aa=100, bb=20
+# connectivity
+par c1 = 135, c2 = 108, c3 = 35, c4 = 25, c5 = 450, c6 = 121 , c7 = 121
+# stimulation: biphasic, frequency, width
+par idbs = 1, fdbs = 10, ddbs = 0.0005
+# effect of stimulation on a neural population
+par pyr =0, gabab=0
+
+
+@meth =euler, dt = 0.0001 ,bound=1000000
+
+### AUTO PARAMETERS
+@ NTST = 50, NMAX = 10000, NPR = 0, DSMIN=0.00001, DSMAX= 0.01, DS = 0.001
+@ EPSS = 0.00001, EPSL = 0.00001, EPSU = 0.00001, PARMIN = 0, PARMAX = 50
+
+done

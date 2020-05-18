@@ -1,0 +1,77 @@
+# run Wendling Chauvel time-rescaled model
+# Input =  Noise mean
+
+## Continuation in B for default parameters
+
+r1 = run(e = 'wcRescaled', c = 'wcRescaled')
+
+r1 = r1 + run(r1('HB1'), c = 'wcRescaled', NPR = 0, IPS = 2, ICP = [2, 11], NMX = 2000, NTST=100)
+r1 = r1 + run(r1('HB2'), c = 'wcRescaled', NPR = 0, IPS = 2, ICP = [2, 11], NMX = 20000, NTST=200)
+r1 = r1 + run(r1('HB3'), c = 'wcRescaled', NPR = 0, IPS = 2, ICP = [2, 11], NMX = 3000, NTST=400)
+r1 = r1 + run(r1('HB4'), c = 'wcRescaled', NPR = 0, IPS = 2, ICP = [2, 11], NMX = 3000, NTST=200)
+
+save(rl(merge(r1)), 'r1')
+
+plot(r1, type="bifurcation", minx=0,maxx=40,miny=-0.1,maxy=25, color_list="black",
+       bifurcation_x=["PAR(2)"], bifurcation_y=["MIN U(2)", "MAX U(2)"],
+       xlabel=" ",ylabel=" ",
+       stability=True, use_labels=False, grid=False, use_symbols=False)
+
+cl()
+!rm -f d.*
+
+## Continuation in B and G along the Hopf bifurcaiton points. 
+lfprepro = loadbd('r1')
+r1bg1 = run(lfprepro('HB1'),c = 'wcRescaled_bg')
+r1bg1 = r1bg1+ run(lfprepro('HB1'),c = 'wcRescaled_bg', DS = 0.01)
+r1bg1 = rl(r1bg1)
+r1bg2 = run(lfprepro('HB2'),c = 'wcRescaled_bg')
+r1bg2 = r1bg2+ run(lfprepro('HB2'),c = 'wcRescaled_bg', DS = 0.01)
+r1bg2 = rl(r1bg2)
+r1bg3 = run(lfprepro('HB3'),c = 'wcRescaled_bg', NMX = 200000)
+r1bg3 = r1bg3+ run(lfprepro('HB3'),c = 'wcRescaled_bg', DS = 0.01, NMX = 200000)
+r1bg3 = rl(r1bg3)
+r1bg4 = run(lfprepro('HB4'), c = 'wcRescaled_bg', NMX = 200000)
+r1bg4 = r1bg4+ run(lfprepro('HB4'),c = 'wcRescaled_bg', DS = 0.01, NMX = 200000)
+r1bg4 = rl(r1bg4)
+
+save(rl(r1bg1+r1bg2+r1bg3+r1bg4), 'r1_HB_BG')
+
+plot('r1_HB_BG', type="bifurcation", minx=0,maxx=40,miny=-0.1,maxy=500, color_list="black",
+       bifurcation_x=["PAR(2)"], bifurcation_y=["PAR(3)"],
+       xlabel=" ",ylabel=" ",
+       stability=True, use_labels=False, grid=False, use_symbols=False)
+       
+cl()
+!rm -f d.*
+########################
+########################
+
+## Continuation in B and G along the LP points. 
+
+lfprepro = loadbd('r1')
+r1bg1 = run(lfprepro('LP1'),c = 'wcRescaled_bg')
+r1bg1 = r1bg1+ run(lfprepro('LP1'),c = 'wcRescaled_bg', DS = 0.01)
+r1bg1 = rl(r1bg1)
+r1bg2 = run(lfprepro('LP2'),c = 'wcRescaled_bg')
+r1bg2 = r1bg2+ run(lfprepro('LP2'),c = 'wcRescaled_bg', DS = 0.01)
+r1bg2 = rl(r1bg2)
+r1bg3 = run(lfprepro('LP3'),c = 'wcRescaled_bg', NMX = 200000)
+r1bg3 = r1bg3+ run(lfprepro('LP3'),c = 'wcRescaled_bg', DS = 0.01, NMX = 200000)
+r1bg3 = rl(r1bg3)
+r1bg4 = run(lfprepro('LP4'), c = 'wcRescaled_bg', NMX = 200000)
+r1bg4 = r1bg4+ run(lfprepro('LP4'),c = 'wcRescaled_bg', DS = 0.01, NMX = 200000)
+r1bg4 = rl(r1bg4)
+
+save(rl(r1bg1+r1bg2+r1bg3+r1bg4), 'r1_LP_BG')
+cl()
+!rm -f d.*
+
+
+plot('r1_LP_BG', type="bifurcation", minx=0,maxx=40,miny=-0.1,maxy=500, color_list="black",
+       bifurcation_x=["PAR(2)"], bifurcation_y=["PAR(3)"],
+       xlabel=" ",ylabel=" ",
+       stability=True, use_labels=False, grid=False, use_symbols=False)
+
+########################
+########################

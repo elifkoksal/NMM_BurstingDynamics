@@ -1,0 +1,43 @@
+# Wendling's neural mass model + Stim
+# Equations
+
+weiner w
+
+dbs = idbs*(heav(sin(2*pi*t*fdbs))*(1-heav(sin(2*pi*(t+ddbs)*fdbs)))-heav(sin(2*pi*(t+2*ddbs)*fdbs))*(1-heav(sin(2*pi*(t+3*ddbs)*fdbs))))
+
+y0'=y5
+y5'=A*aa*sigm(pyr*dbs + y1 - y2 - y3)-2*aa*y5 - aa*aa*y0
+# PYRAMIDAL
+y1' = y6 
+y6'=A*aa*(pm + c2*sigm(pyr*dbs + C1*y0))-2*aa*y6-aa*aa*y1 +a*aa*ps*w
+# GABAslow
+y2'=y7 
+y7'=B*bb*c4*sigm(gabab*dbs + c3*y0)-2*bb*y7-bb*bb*y2
+# GABAfast
+y3'=y8
+y8'=G*gg*c7*sigm(gabaf*dbs + c5*y0 - c6/c4*y2)-2*gg*y8-gg*gg*y3
+
+sigm(x) = 5/(1+exp(0.56*(6-x)))
+
+aux lfp = y1 - y2 - y3
+aux stim = dbs
+
+
+# Parameters
+# external input
+par pm = 90, ps  = 0
+# synaptic constants
+par A=5, B=25, G=35, aa=100, bb=20, gg=350
+# connectivity
+par c1 = 135, c2 = 108, c3 = 35, c4 = 25, c5 = 450, c6 = 121 , c7 = 121
+# stimulation: biphasic, frequency, width
+par idbs = 1, fdbs = 10, ddbs = 0.0005
+# effect of stimulation on a neural population
+par pyr =0, gabab=0, gabaf = 0
+
+# Initial conditions
+init y0=0, y5=0, y6=0,y1=0, y7=0, y2=0, y8=0, y3=0
+
+@meth =euler, dt = 0.00001 ,bound=1000000, total = 10
+
+done
