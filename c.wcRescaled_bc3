@@ -1,0 +1,7 @@
+NDIM = 8, IPS = 1, IRS = 0, ILP =   1
+ICP =  [2, 12]
+NTST =  100, NCOL= 4, IAD =   3, ISP =  2, ISW = 2, IPLT= -1, NBC= 0, NINT= 0
+NMX =  10000, NPR=  0, MXBF=  10, IID =   3, ITMX= 8, ITNW= 5, NWTN= 3, JAC= 0
+EPSL= 1e-06, EPSU = 1e-06, EPSS = 1e-06
+DS  = -0.01, DSMIN= 1e-10, DSMAX=  0.1, IADS=   1
+NPAR = 16, THL =  {}, THU =  {}, UZSTOP={2:[-10.0, 100], 12:[0, 200]}

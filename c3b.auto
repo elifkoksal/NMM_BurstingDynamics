@@ -1,0 +1,60 @@
+# run Wendling model
+# Input =  Noise mean
+xc3 = run(e = 'wcRescaled', c = 'wcRescaled', ICP = [16], UZSTOP = {16 : [121]}, DS = -1, DSMAX = 5)
+xc3 = run(xc3('UZ1'),ICP = [3], UZSTOP = {3 : [35]}, DS = 1, DSMAX = 5)
+
+r1 = run(xc3('UZ1'),  c = 'wcRescaled')
+save(rl(r1), 'c5=450_c3=35')
+cl()
+!rm -f d.*
+####
+
+
+lfprepro = loadbd('c5=450_c3=35')
+r1bg1 = run(lfprepro('HB1'),c = 'wcRescaled_bc3')
+r1bg1 = r1bg1+ run(lfprepro('HB1'),c = 'wcRescaled_bc3', DS = 0.01)
+r1bg1 = rl(r1bg1)
+r1bg2 = run(lfprepro('HB2'),c = 'wcRescaled_bc3')
+r1bg2 = r1bg2+ run(lfprepro('HB2'),c = 'wcRescaled_bc3', DS = 0.01)
+r1bg2 = rl(r1bg2)
+r1bg3 = run(lfprepro('HB3'),c = 'wcRescaled_bc3', NMX = 200000)
+r1bg3 = r1bg3+ run(lfprepro('HB3'),c = 'wcRescaled_bc3', DS = 0.01, NMX = 200000)
+r1bg3 = rl(r1bg3)
+r1bg4 = run(lfprepro('HB4'), c = 'wcRescaled_bc3', NMX = 200000)
+r1bg4 = r1bg4+ run(lfprepro('HB4'),c = 'wcRescaled_bc3', DS = 0.01, NMX = 200000)
+r1bg4 = rl(r1bg4)
+
+save(rl(r1bg1+r1bg2+r1bg3+r1bg4), 'c5=450_HB_BC3')
+
+cl()
+!rm -f d.*
+########################
+########################
+
+lfprepro = loadbd('c5=450_c3=35')
+r1bg1 = run(lfprepro('LP1'),c = 'wcRescaled_bc3')
+r1bg1 = r1bg1+ run(lfprepro('LP1'),c = 'wcRescaled_bc3', DS = 0.01)
+r1bg1 = rl(r1bg1)
+r1bg2 = run(lfprepro('LP2'),c = 'wcRescaled_bc3')
+r1bg2 = r1bg2+ run(lfprepro('LP2'),c = 'wcRescaled_bc3', DS = 0.01)
+r1bg2 = rl(r1bg2)
+r1bg3 = run(lfprepro('LP3'),c = 'wcRescaled_bc3', NMX = 200000)
+r1bg3 = r1bg3+ run(lfprepro('LP3'),c = 'wcRescaled_bc3', DS = 0.01, NMX = 200000)
+r1bg3 = rl(r1bg3)
+r1bg4 = run(lfprepro('LP4'), c = 'wcRescaled_bc3', NMX = 200000)
+r1bg4 = r1bg4+ run(lfprepro('LP4'),c = 'wcRescaled_bc3', DS = 0.01, NMX = 200000)
+r1bg4 = rl(r1bg4)
+
+lfprepro = loadbd('c5=450_c3=200')
+r1bg5 = run(lfprepro('LP1'),c = 'wcRescaled_bc3')
+r1bg5 = r1bg5+ run(lfprepro('LP1'),c = 'wcRescaled_bc3', DS = 0.01)
+
+save(rl(r1bg1+r1bg2+r1bg3+r1bg4 +r1bg5), 'c5=450_LP_BC3')
+cl()
+!rm -f d.*
+
+hb = loadbd('c5=450_HB_BC3')
+
+plot(hb, use_labels=False, color_list='red', grid=False, miny=0.0)
+lp = loadbd('c5=450_LP_BC3')
+plot(lp, use_labels = False,  color_list='black', grid=False, miny=0.0)
